@@ -1,0 +1,24 @@
+# Lingkungan Virtual Python
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
+
+# Data (JANGAN PUSH DATA MENTAH KE GITHUB!)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model Artifacts & MLflow DB (File terlalu besar & sering berubah)
+src/models_store/*.h5
+src/models_store/*.pkl
+src/models_store/mlflow.db
+mlruns/
