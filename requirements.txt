@@ -1,9 +1,24 @@
+# --- Core ML & Data ---
 pandas>=2.0.0
 numpy>=1.24.0
 tensorflow>=2.10.0
 scikit-learn>=1.2.0
 joblib>=1.2.0
+
+# --- Backend API ---
 fastapi>=0.100.0
 uvicorn>=0.22.0
 pydantic>=2.0.0
 python-multipart
+
+# --- Frontend (Dashboard) ---
+streamlit>=1.28.0
+plotly>=5.17.0
+requests>=2.31.0
+
+# --- File Parsers (Excel & PDF) ---
+openpyxl>=3.1.2
+pdfplumber>=0.10.3
+
+# --- MLOps Tracking ---
+mlflow>=2.8.0

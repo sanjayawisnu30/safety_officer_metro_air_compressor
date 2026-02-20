@@ -22,3 +22,10 @@ src/models_store/*.h5
 src/models_store/*.pkl
 src/models_store/mlflow.db
 mlruns/
+
+# --- TAMBAHAN BARU ---
+# Secrets & Environment Variables
+.env
+
+# Streamlit Cache
+.streamlit/

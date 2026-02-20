@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+   # 1. SERVER BACKEND (FastAPI)
+   api:
+      build: .
+      container_name: metropt_api
+      command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+      ports:
+         - "8000:8000"
+      volumes:
+         - .:/app # Sinkronisasi folder agar kalau ada perubahan code tidak perlu rebuild
+      restart: unless-stopped
+
+   # 2. SERVER FRONTEND (Streamlit)
+   frontend:
+      build: .
+      container_name: metropt_frontend
+      command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+      ports:
+         - "8501:8501"
+      environment:
+         # Di sini letak keajaibannya! Kita suruh Streamlit memanggil service 'api'
+         - API_URL=http://api:8000
+      depends_on:
+         - api # Pastikan API nyala duluan sebelum Streamlit
+      volumes:
+         - .:/app
+      restart: unless-stopped
+
+   # 3. MLOPS TRACKING (MLflow)
+   mlflow:
+      build: .
+      container_name: metropt_mlflow
+      command: mlflow ui --backend-store-uri sqlite:///src/models_store/mlflow.db --host 0.0.0.0 --port 5000
+      ports:
+         - "5000:5000"
+      volumes:
+         - .:/app
+      restart: unless-stopped

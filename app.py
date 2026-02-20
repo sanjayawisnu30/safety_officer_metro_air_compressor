@@ -6,12 +6,15 @@ import json
 import plotly.express as px
 import plotly.graph_objects as go
 import pdfplumber
+import os
 
 # --- 1. KONFIGURASI HALAMAN ---
 st.set_page_config(page_title="AI Safety Officer", page_icon="🤖", layout="wide")
 
-API_PREDICT_URL = "http://127.0.0.1:8000/predict"
-API_HEALTH_URL = "http://127.0.0.1:8000/health"
+# Gunakan Environment Variable jika ada (untuk Docker), jika tidak ada pakai localhost (untuk jalankan manual)
+API_BASE_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+API_PREDICT_URL = f"{API_BASE_URL}/predict"
+API_HEALTH_URL = f"{API_BASE_URL}/health"
 
 # --- 2. FUNGSI PEMBACA FILE ---
 @st.cache_data
