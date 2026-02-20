@@ -1,9 +1,8 @@
 import joblib
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import load_model
 
-# Import disesuaikan dengan tree folder baru
+from tensorflow.keras.models import load_model
 from src.utils.config import MODEL_PATH, SCALER_PATH, CONFIG_PATH, FEATURE_COLS, TIME_STEPS
 from src.data.preprocessing import process_input_data, prepare_lstm_sequence
 from src.utils.diagnosis import generate_report
@@ -16,7 +15,7 @@ class AnomalyDetector:
         self.load_artifacts()
 
     def load_artifacts(self):
-        print("⏳ Loading artifacts...")
+        print("Loading artifacts...")
         try:
             self.config = joblib.load(CONFIG_PATH)
             self.thresh_critical = self.config.get('threshold_critical', 0.33)
@@ -29,9 +28,9 @@ class AnomalyDetector:
             except:
                 self.model = load_model(MODEL_PATH, compile=False)
                 
-            print("✅ System Loaded Successfully!")
+            print("System Loaded Successfully!")
         except Exception as e:
-            print(f"❌ Error loading artifacts: {e}")
+            print(f"Error loading artifacts: {e}")
             raise e
 
     def predict(self, df_input):

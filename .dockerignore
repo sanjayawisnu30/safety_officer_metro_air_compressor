@@ -1,7 +1,11 @@
-__pycache__
-venv
-.git
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.git/
 .gitignore
-*.ipynb
-data/raw
-data/processed
+.vscode/
+data/
+mlruns/
+.env

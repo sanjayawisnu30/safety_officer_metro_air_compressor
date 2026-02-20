@@ -8,15 +8,14 @@ import plotly.graph_objects as go
 import pdfplumber
 import os
 
-# --- 1. KONFIGURASI HALAMAN ---
 st.set_page_config(page_title="AI Safety Officer", page_icon="🤖", layout="wide")
 
-# Gunakan Environment Variable jika ada (untuk Docker), jika tidak ada pakai localhost (untuk jalankan manual)
+# env
 API_BASE_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 API_PREDICT_URL = f"{API_BASE_URL}/predict"
 API_HEALTH_URL = f"{API_BASE_URL}/health"
 
-# --- 2. FUNGSI PEMBACA FILE ---
+# Read File
 @st.cache_data
 def load_data(file):
     file_extension = file.name.split('.')[-1].lower()
@@ -41,7 +40,7 @@ def load_data(file):
         st.error(f"Error membaca file: {e}")
         return None
 
-# --- 3. AMBIL THRESHOLD DARI API ---
+# get_thershold from api 
 @st.cache_data
 def get_thresholds():
     try:
@@ -52,7 +51,7 @@ def get_thresholds():
 
 thresh_critical, thresh_warning = get_thresholds()
 
-# --- 4. TAMPILAN UI STREAMLIT ---
+# UI Streamlit
 st.title("🤖 AI Safety Officer: Predictive Maintenance")
 st.markdown("Analisis tren degradasi mesin dan prediksi sisa umur pakai (*Remaining Useful Life*).")
 
@@ -62,7 +61,7 @@ with st.sidebar:
     st.markdown("---")
     st.info(f"**Threshold Sistem:**\n- 🔴 Critical: {thresh_critical:.4f}\n- 🟡 Warning: {thresh_warning:.4f}")
 
-# --- 5. LOGIKA PREDIKTIF ---
+# Predictive
 if uploaded_file is not None:
     df = load_data(uploaded_file)
     
@@ -112,11 +111,7 @@ if uploaded_file is not None:
             
             my_bar.empty()
 
-            # =========================================================
-            # PERUBAHAN UI DIMULAI DI SINI
-            # =========================================================
-
-            # --- 6. HASIL DIAGNOSA AKHIR (Kondisi Saat Ini diletakkan di atas) ---
+            # Hasil Diagnosa
             if latest_result:
                 st.header("🕵️ Kondisi Mesin Saat Ini")
                 m1, m2, m3 = st.columns(3)
@@ -124,7 +119,7 @@ if uploaded_file is not None:
                 m2.metric("Skor Risiko Saat Ini", f"{latest_result['risk_score']:.4f}")
                 m3.metric("Severity Level", f"Level {latest_result['severity_level']}")
                 
-                # Banner dinamis berdasarkan tingkat keparahan
+                # Severity Level
                 if latest_result['severity_level'] == 2:
                     st.error(f"🚨 **ALASAN CRITICAL:** {latest_result['analysis_text']}")
                 elif latest_result['severity_level'] == 1:
@@ -134,7 +129,7 @@ if uploaded_file is not None:
 
             st.markdown("---")
 
-            # --- 7. KALKULASI RUL (EKSTRAPOLASI LINIER) ---
+            # Remaining Useful Life
             x_vals = np.arange(len(risk_scores_history))
             slope, intercept = np.polyfit(x_vals, risk_scores_history, 1)
             
@@ -163,7 +158,7 @@ if uploaded_file is not None:
                     rul_text = "🟢 **MESIN STABIL.** Tidak terdeteksi anomali atau tren kerusakan dalam waktu dekat."
                     st.success(rul_text)
 
-            # --- 8. GAMBAR GRAFIK DENGAN PLOTLY ---
+            # Grafik
             fig = go.Figure()
 
             fig.add_trace(go.Scatter(x=timestamps_history, y=risk_scores_history, 

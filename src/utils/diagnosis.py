@@ -28,7 +28,6 @@ DIAGNOSIS_MAP = {
         'TINGGI': "Anomali Kalkulasi (False Positive).",
         'NORMAL': "Rasio Input/Output tidak wajar."
     }
-    # ... (Tambahkan fitur lain jika perlu)
 }
 
 def analyze_direction(actual, predicted, threshold=0.05):

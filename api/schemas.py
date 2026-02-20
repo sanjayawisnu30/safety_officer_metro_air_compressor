@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 
-# 1. Model Data Tunggal (Satu baris sensor)
+# Model Data Tunggal (Satu baris sensor)
 class SensorReading(BaseModel):
     timestamp: datetime
     TP2: float
@@ -27,12 +27,12 @@ class SensorReading(BaseModel):
             }
         }
 
-# 2. Model Input Request (List of readings)
-# Kita butuh minimal 30 data point (30 menit) untuk LSTM
+# Model Input Request 
+# min 30 data point untuk LSTM
 class PredictionRequest(BaseModel):
     readings: List[SensorReading]
 
-# 3. Model Output Response (Apa yang dikembalikan API)
+# Model Output Response 
 class FeatureContribution(BaseModel):
     Feature: str
     Error: float

@@ -1,9 +1,8 @@
 import pandas as pd
 import uvicorn
+
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-
-# Import disesuaikan
 from api.schemas import PredictionRequest, PredictionResponse
 from src.inference import detector 
 from src.models.train import run_training
@@ -25,12 +24,6 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "AI Safety Officer is Online! 🟢", "docs": "/docs"}
-
-@app.get("/health")
-def health_check():
-    if detector.model is None or detector.scaler is None:
-        raise HTTPException(status_code=503, detail="Model belum siap.")
-    return {"status": "healthy", "model_loaded": True, "config": detector.config}
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict_anomaly(payload: PredictionRequest):
