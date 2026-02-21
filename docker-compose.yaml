@@ -14,7 +14,6 @@ services:
    frontend:
       build: .
       container_name: safety_frontend
-      # FLAG SAKTI TAMBAHAN: headless, matikan telemetry, dan biarkan WebSockets lancar
       command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true --browser.gatherUsageStats=false --server.enableCORS=false --server.enableXsrfProtection=false
       ports:
          - "8501:8501"
@@ -22,8 +21,5 @@ services:
          - API_URL=http://api:8000
       depends_on:
          - api
-      # KITA MATIKAN SEMENTARA VOLUMES INI
-      # Karena kode sudah di-COPY lewat Dockerfile, fitur ini sering bikin Streamlit hang di Windows
-      # volumes:
       #    - .:/app
       restart: unless-stopped
